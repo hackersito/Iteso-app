@@ -21,6 +21,8 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  supercharged: 1.11.0
+  http: 0.12.2
   curved_navigation_bar: 0.3.4
   get: 3.15.0
   flutter:
