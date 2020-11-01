@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:get/get.dart';
 import 'package:iteso_app/internationalization/Translations.dart';
 import 'dart:ui' as ui;
@@ -8,7 +9,8 @@ import 'app/routes/app_pages.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIOverlays([]);
+  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
+  FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
   debugPrint(ui.window.locale.toString());
   runApp(
     GetMaterialApp(
