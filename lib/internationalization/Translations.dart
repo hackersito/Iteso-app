@@ -2,15 +2,23 @@ import 'package:get/get.dart';
 
 class AppTranslations extends Translations {
   @override
-  // TODO: implement keys
   Map<String, Map<String, String>> get keys => {
+        //Translations log in page
         "en_US": {
-          "welcome": "Welcome.",
-          "text_logging": "Log in",
+          "welcome": "Welcome Back.",
+          "text_login": "Log in and let's start",
+          "username": "Username",
+          "pass": "Password",
+          "login": "Login",
+          "forgot_pass": "Forgot Password"
         },
         "es_MX": {
-          "welcome": "Bienvenidos.",
-          "text_logging": "Inicia sesión",
+          "welcome": "Bienvenido de regreso.",
+          "text_logging": "Inicia sesión y empecemos",
+          "username": "Nombre de usuario",
+          "pass": "Contraseña",
+          "login": "Entrar",
+          "forgot_pass": "Olvide mi contraseña"
         },
       };
 }
