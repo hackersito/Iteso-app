@@ -25,7 +25,7 @@ class HomeView extends GetView<HomeController> {
                 margin: EdgeInsets.zero,
                 child: FractionallySizedBox(
                   alignment: Alignment.topCenter,
-                  heightFactor: 0.7,
+                  heightFactor: 0.65,
                   child: ClipPath(
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     clipper: LoginClipper(),
@@ -61,7 +61,10 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.zero,
+                margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.57,
+                  left: 0,
+                ),
                 width: MediaQuery.of(context).size.width,
                 child: Form(
                   key: _formKey,
