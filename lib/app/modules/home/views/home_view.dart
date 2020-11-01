@@ -27,8 +27,8 @@ class HomeView extends GetView<HomeController> {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.3,
-            left: 40,
+            top: MediaQuery.of(context).size.height * 0.32,
+            left: 45,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
