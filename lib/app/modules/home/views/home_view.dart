@@ -15,42 +15,53 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Styles.azulBajito,
-      body: SingleChildScrollView(
-        child: Stack(
-          overflow: Overflow.visible,
-          children: <Widget>[
-            ClipPath(
-              clipper: LoginClipper(),
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.65,
-                color: Styles.azulIteso,
-              ),
-            ),
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.32,
-              left: 45,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "welcome".tr,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold),
+      body: LayoutBuilder(
+        builder: (_, constraints) => ConstrainedBox(
+          constraints: constraints,
+          child: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.zero,
+                child: FractionallySizedBox(
+                  alignment: Alignment.topCenter,
+                  heightFactor: 0.7,
+                  child: ClipPath(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    clipper: LoginClipper(),
+                    child: SizedBox(
+                      child: Container(
+                        color: Styles.azulIteso,
+                      ),
+                    ),
                   ),
-                  Text(
-                    "text_login".tr,
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w300),
-                  )
-                ],
+                ),
               ),
-            ),
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.57,
-              left: 0,
-              child: Container(
+              Container(
+                margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.32,
+                  left: 45,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "welcome".tr,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "text_login".tr,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w300),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.zero,
                 width: MediaQuery.of(context).size.width,
                 child: Form(
                   key: _formKey,
@@ -95,8 +106,8 @@ class HomeView extends GetView<HomeController> {
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
