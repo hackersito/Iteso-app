@@ -1,23 +1,43 @@
 import 'package:clip_shadow/clip_shadow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iteso_app/app/modules/home/controllers/home_controller.dart';
+import 'package:iteso_app/app/controllers/db_controller.dart';
+import 'package:iteso_app/app/controllers/login_controller.dart';
 import 'package:iteso_app/app/modules/home/widgets/login_button_widget.dart';
 import 'package:iteso_app/app/modules/home/widgets/login_textformfield_widget.dart';
 import 'package:iteso_app/app/widgets/login_clipper.dart';
+import 'package:iteso_app/network/network.dart';
 import 'package:iteso_app/values/styles.dart';
 
-class HomeView extends GetView<HomeController> {
+class HomeView extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
   final _emailFocus = FocusNode();
   final _passFocus = FocusNode();
+
+  final _emailController = TextEditingController();
+  final _passController = TextEditingController();
+
+  void login() {
+    if (_formKey.currentState.validate()) {
+      Network.login(_emailController.text, _passController.text).then((value) {
+        if (GetUtils.isNullOrBlank(value?.token)) {
+          Get.snackbar("Error", "bad_pass".tr);
+          _passController.text = "";
+        } else {
+          value.save(Get.find<DbController>().db);
+          Get.put(LoginController(value));
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: false,
-      backgroundColor: Styles.azulIteso,
+      backgroundColor: CustomColors.azulIteso,
       body: LayoutBuilder(
         builder: (_, constraints) => SingleChildScrollView(
           child: ConstrainedBox(
@@ -42,24 +62,32 @@ class HomeView extends GetView<HomeController> {
                         children: <Widget>[
                           LoginTextFormField(
                             hint: "username",
+                            controller: _emailController,
                             focusNode: _emailFocus,
+                            validator: (value) => !GetUtils.isUsername(value)
+                                ? "err_user".tr
+                                : null,
                             nextFocusNode: _passFocus,
+                            isAccount: true,
                           ),
                           SizedBox(
                             height: 20,
                           ),
                           LoginTextFormField(
                             hint: "pass",
+                            controller: _passController,
+                            validator: (value) => GetUtils.isNullOrBlank(value)
+                                ? "err_pass".tr
+                                : null,
                             icon: Icons.vpn_key,
                             focusNode: _passFocus,
+                            onFieldSubmitted: (_) => login(),
                             obscureText: true,
                           ),
                           SizedBox(height: 20),
                           Row(
                             children: [
-                              LoginButton(
-                                onPress: () {},
-                              ),
+                              LoginButton(onPress: login),
                               Flexible(
                                 child: Center(
                                   child: Text(
@@ -77,6 +105,33 @@ class HomeView extends GetView<HomeController> {
                     ),
                   ),
                 ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    margin: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).size.height * 0.12),
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: Text(
+                        "privacy".tr,
+                        style: Styles.textoBlanco,
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 40,
+                    color: CustomColors.azulIteso[600],
+                    width: MediaQuery.of(context).size.width,
+                    child: Text(
+                      "services".tr,
+                      style: Styles.textoBlanco,
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -104,7 +159,7 @@ class ClipColor extends StatelessWidget {
         ],
         clipper: LoginClipper(),
         child: Container(
-          color: Styles.blancoLight,
+          color: CustomColors.blancoLight,
         ),
       ),
     );
@@ -146,14 +201,14 @@ class WelcomeText extends StatelessWidget {
           Text(
             "welcome".tr,
             style: TextStyle(
-                color: Styles.azulBajito,
+                color: CustomColors.azulBajito,
                 fontSize: 30,
                 fontWeight: FontWeight.bold),
           ),
           Text(
             "text_login".tr,
             style: TextStyle(
-                color: Styles.azulBajito, fontWeight: FontWeight.w300),
+                color: CustomColors.azulBajito, fontWeight: FontWeight.w300),
           )
         ],
       ),

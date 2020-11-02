@@ -6,7 +6,7 @@ class Login implements DbMethods {
   @primaryKey
   String token;
 
-  Login({this.token});
+  Login(this.token);
 
   Login.fromJson(Map<String, dynamic> json) {
     token = json['token'];

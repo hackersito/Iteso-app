@@ -26,7 +26,7 @@ class LoginButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
         ),
         decoration: BoxDecoration(
-            color: Styles.azulBajito,
+            color: CustomColors.azulBajito,
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(

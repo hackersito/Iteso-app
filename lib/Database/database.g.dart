@@ -119,8 +119,7 @@ class _$LoginDao extends LoginDao {
   @override
   Future<Login> getLogin() async {
     return _queryAdapter.query('SELECT * FROM Login',
-        mapper: (Map<String, dynamic> row) =>
-            Login(token: row['token'] as String));
+        mapper: (Map<String, dynamic> row) => Login(row['token'] as String));
   }
 
   @override
