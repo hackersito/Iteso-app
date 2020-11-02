@@ -11,6 +11,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
   FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
+  FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
   debugPrint(ui.window.locale.toString());
   runApp(
     GetMaterialApp(

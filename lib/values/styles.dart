@@ -7,4 +7,7 @@ class Styles {
       generateMaterialColor(Color(0xFF22489d));
   static final MaterialColor azulBajito =
       generateMaterialColor(Color(0x0FF1875c5));
+
+  static final MaterialColor blancoLight =
+      generateMaterialColor(Color(0xFFF5F5F5));
 }

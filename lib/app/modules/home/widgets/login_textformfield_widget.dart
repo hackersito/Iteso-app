@@ -43,7 +43,7 @@ class LoginTextFormField extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Colors.black12,
-              offset: Offset(0.0, 1.0), //(x,y)
+              offset: Offset(0.0, 10.0), //(x,y)
               blurRadius: 6.0,
             ),
           ]),

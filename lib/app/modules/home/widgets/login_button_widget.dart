@@ -26,9 +26,15 @@ class LoginButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
         ),
         decoration: BoxDecoration(
-          color: Styles.azulIteso,
-          borderRadius: BorderRadius.circular(15),
-        ),
+            color: Styles.azulBajito,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                offset: Offset(0.0, 10.0), //(x,y)
+                blurRadius: 6.0,
+              ),
+            ]),
       ),
     );
   }
