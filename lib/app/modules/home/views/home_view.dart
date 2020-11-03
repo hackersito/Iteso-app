@@ -5,6 +5,7 @@ import 'package:iteso_app/app/controllers/db_controller.dart';
 import 'package:iteso_app/app/controllers/login_controller.dart';
 import 'package:iteso_app/app/modules/home/widgets/login_button_widget.dart';
 import 'package:iteso_app/app/modules/home/widgets/login_textformfield_widget.dart';
+import 'package:iteso_app/app/routes/app_pages.dart';
 import 'package:iteso_app/app/widgets/login_clipper.dart';
 import 'package:iteso_app/network/network.dart';
 import 'package:iteso_app/values/styles.dart';
@@ -129,9 +130,12 @@ class HomeView extends StatelessWidget {
                     height: 40,
                     color: CustomColors.azulIteso[600],
                     width: MediaQuery.of(context).size.width,
-                    child: Text(
-                      "services".tr,
-                      style: Styles.textoBlanco,
+                    child: GestureDetector(
+                      onTap: () => Get.toNamed(Routes.SERVICIOS_ITESO),
+                      child: Text(
+                        "services".tr,
+                        style: Styles.textoBlanco,
+                      ),
                     ),
                   ),
                 )

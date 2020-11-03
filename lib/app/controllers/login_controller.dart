@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:iteso_app/app/routes/app_pages.dart';
 import 'package:iteso_app/models/login_model.dart';
 
 class LoginController extends GetxService {
@@ -8,6 +9,6 @@ class LoginController extends GetxService {
   @override
   void onInit() {
     super.onInit();
-    Get.snackbar("Exito", "Loggeado correctamente");
+    Get.offNamed(Routes.MENU);
   }
 }

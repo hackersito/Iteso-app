@@ -3,4 +3,6 @@ part of 'app_pages.dart';
 
 abstract class Routes {
   static const HOME = '/home';
+  static const MENU = '/menu';
+  static const SERVICIOS_ITESO = '/servicios-iteso';
 }

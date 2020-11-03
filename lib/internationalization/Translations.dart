@@ -21,6 +21,8 @@ class AppTranslations extends Translations {
           "error": "Error",
           "err_url": "Error launching url",
           "err_email": "Error sending email",
+          // Iteso services
+          "transport": "ITESO University Transport",
         },
 
         // Spanish
@@ -40,7 +42,9 @@ class AppTranslations extends Translations {
           "bad_pass": "La cuenta o contraseña que ingresaste es incorrecta",
           "error": "Error",
           "err_url": "Error al abrir url",
-          "err_email": "Error al mandar email"
+          "err_email": "Error al mandar email",
+          // Iteso services
+          "transport": "Transporte Universitario ITESO",
         },
       };
 }
