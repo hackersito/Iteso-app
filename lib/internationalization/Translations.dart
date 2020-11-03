@@ -18,6 +18,9 @@ class AppTranslations extends Translations {
           "err_user": "Enter valid account",
           "err_pass": "Enter valid password",
           "bad_pass": "The account or password you\'ve entered is incorrect",
+          "error": "Error",
+          "err_url": "Error launching url",
+          "err_email": "Error sending email",
         },
 
         // Spanish
@@ -35,6 +38,9 @@ class AppTranslations extends Translations {
           "err_user": "Ingrese un usuario válido",
           "err_pass": "Ingrese una contraseña válida",
           "bad_pass": "La cuenta o contraseña que ingresaste es incorrecta",
+          "error": "Error",
+          "err_url": "Error al abrir url",
+          "err_email": "Error al mandar email"
         },
       };
 }

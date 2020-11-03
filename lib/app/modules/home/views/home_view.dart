@@ -22,7 +22,7 @@ class HomeView extends StatelessWidget {
     if (_formKey.currentState.validate()) {
       Network.login(_emailController.text, _passController.text).then((value) {
         if (GetUtils.isNullOrBlank(value?.token)) {
-          Get.snackbar("Error", "bad_pass".tr);
+          Get.snackbar("error".tr, "bad_pass".tr);
           _passController.text = "";
         } else {
           value.save(Get.find<DbController>().db);
@@ -90,11 +90,14 @@ class HomeView extends StatelessWidget {
                               LoginButton(onPress: login),
                               Flexible(
                                 child: Center(
-                                  child: Text(
-                                    "forgot_pass".tr,
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w300),
+                                  child: GestureDetector(
+                                    onTap: Network.launchEmail,
+                                    child: Text(
+                                      "forgot_pass".tr,
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w300),
+                                    ),
                                   ),
                                 ),
                               )
@@ -111,7 +114,7 @@ class HomeView extends StatelessWidget {
                     margin: EdgeInsets.only(
                         bottom: MediaQuery.of(context).size.height * 0.12),
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: Network.launchUrl,
                       child: Text(
                         "privacy".tr,
                         style: Styles.textoBlanco,
