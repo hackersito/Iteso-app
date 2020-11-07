@@ -1,11 +1,14 @@
 import 'dart:convert';
 
+import 'package:floor/floor.dart';
+
 List<Horario> horariosFromJson(String str) =>
     List<Horario>.from(json.decode(str).map((x) => Horario.fromMap(x)));
 
 String horariosToJson(List<Horario> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toMap())));
 
+@entity
 class Horario {
   Horario({
     this.tipoEspacio,
@@ -24,6 +27,8 @@ class Horario {
     this.salon,
   });
 
+  @primaryKey
+  final String id;
   final String tipoEspacio;
   final String asignatura;
   final String numSemana;
@@ -36,7 +41,6 @@ class Horario {
   final String nombreDia;
   final String nombreMes;
   final String horaInicioFin;
-  final String id;
   final String salon;
 
   factory Horario.fromMap(Map<String, dynamic> json) => Horario(

@@ -6,7 +6,10 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:iteso_app/models/horario_model.dart';
+import 'package:iteso_app/network/network.dart';
 import 'package:iteso_app/values/styles.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class MenuView extends StatefulWidget {
@@ -24,9 +27,12 @@ class _MenuViewState extends State<MenuView> {
 
   DateTime _dateTime;
 
+  List<Horario> _horarios;
+
   @override
   void initState() {
     super.initState();
+    getHorarios(DateTime.now());
     _calendarController = CalendarController();
   }
 
@@ -56,13 +62,39 @@ class _MenuViewState extends State<MenuView> {
       body: Column(
         children: <Widget>[
           CustomCalendar(
-            onDateSelected: (value) => setState(() {
+            onDateSelected: (value) async {
               _dateTime = value;
-            }),
+              await getHorarios(_dateTime);
+              setState(
+                () {},
+              );
+            },
           ),
+          Flexible(
+            child: ListView.builder(
+              itemCount: _horarios?.length ?? 0,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: Container(
+                      padding: EdgeInsets.all(15),
+                      child: Text(_horarios[index].asignatura)),
+                );
+              },
+            ),
+          )
         ],
       ),
     );
+  }
+
+  void getHorarios(DateTime dateTime) async {
+    await Network.getData(
+            Network.URL_HORARIO, "/${Jiffy(dateTime).week}/${dateTime.year}")
+        .then((value) {
+      _horarios = horariosFromJson(value.body)
+          .where((element) => element.horaFin.day == dateTime.day)
+          .toList();
+    });
   }
 }
 
@@ -148,16 +180,14 @@ class _CustomCalendarState extends State<CustomCalendar> {
               return Container(
                 margin: EdgeInsets.all(8),
                 child: ClipOval(
-                  child: Expanded(
-                    child: Container(
-                        alignment: Alignment.center,
-                        color: CustomColors.azulBajito[200],
-                        child: Text(date.day.toString(),
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: CustomColors.azulBajito,
-                            ))),
-                  ),
+                  child: Container(
+                      alignment: Alignment.center,
+                      color: CustomColors.azulBajito[200],
+                      child: Text(date.day.toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: CustomColors.azulBajito,
+                          ))),
                 ),
               );
             },
@@ -165,16 +195,14 @@ class _CustomCalendarState extends State<CustomCalendar> {
               return Container(
                 margin: EdgeInsets.all(8),
                 child: ClipOval(
-                  child: Expanded(
-                    child: Container(
-                      alignment: Alignment.center,
-                      color: Colors.white,
-                      child: Text(
-                        date.day.toString(),
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: CustomColors.azulBajito),
-                      ),
+                  child: Container(
+                    alignment: Alignment.center,
+                    color: Colors.white,
+                    child: Text(
+                      date.day.toString(),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: CustomColors.azulBajito),
                     ),
                   ),
                 ),

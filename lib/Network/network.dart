@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'package:get/get.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:iteso_app/app/controllers/login_controller.dart';
 import 'package:iteso_app/models/login_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Network {
   static const String _urlPrivacy = "https://datospersonales.iteso.mx";
+  static const String URL_HORARIO = '/WebServiceREST/horarioescolar/';
   static Future<http.Response> fetchData(String url, Map<String, String> body) {
     return http.post(
         "https://webtest.iteso.mx/ItesoMovil-web/WebServices" + url,
@@ -21,6 +23,11 @@ class Network {
         .catchError((error) {
       Get.printError(info: error.toString());
     });
+  }
+
+  static Future<http.Response> getData(String url, String urlParams) async {
+    final String token = Get.find<LoginController>().login.token;
+    return fetchData(url + token + urlParams, {});
   }
 
   static final Uri _emailLaunchUri = Uri(

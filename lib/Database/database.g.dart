@@ -62,6 +62,8 @@ class _$AppDatabase extends AppDatabase {
 
   LoginDao _loginDaoInstance;
 
+  HorarioDao _horarioDaoInstance;
+
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
@@ -81,6 +83,8 @@ class _$AppDatabase extends AppDatabase {
       onCreate: (database, version) async {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Login` (`token` TEXT, PRIMARY KEY (`token`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `Horario` (`id` TEXT, `tipoEspacio` TEXT, `asignatura` TEXT, `numSemana` TEXT, `nombreProfesor` TEXT, `grupo` TEXT, `idioma` TEXT, `horaInicio` INTEGER, `horaFin` INTEGER, `fecha` TEXT, `nombreDia` TEXT, `nombreMes` TEXT, `horaInicioFin` TEXT, `salon` TEXT, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -91,6 +95,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   LoginDao get loginDao {
     return _loginDaoInstance ??= _$LoginDao(database, changeListener);
+  }
+
+  @override
+  HorarioDao get horarioDao {
+    return _horarioDaoInstance ??= _$HorarioDao(database, changeListener);
   }
 }
 
@@ -149,3 +158,152 @@ class _$LoginDao extends LoginDao {
     await _loginDeletionAdapter.deleteList(varT);
   }
 }
+
+class _$HorarioDao extends HorarioDao {
+  _$HorarioDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _horarioInsertionAdapter = InsertionAdapter(
+            database,
+            'Horario',
+            (Horario item) => <String, dynamic>{
+                  'id': item.id,
+                  'tipoEspacio': item.tipoEspacio,
+                  'asignatura': item.asignatura,
+                  'numSemana': item.numSemana,
+                  'nombreProfesor': item.nombreProfesor,
+                  'grupo': item.grupo,
+                  'idioma': item.idioma,
+                  'horaInicio': _dateTimeConverter.encode(item.horaInicio),
+                  'horaFin': _dateTimeConverter.encode(item.horaFin),
+                  'fecha': item.fecha,
+                  'nombreDia': item.nombreDia,
+                  'nombreMes': item.nombreMes,
+                  'horaInicioFin': item.horaInicioFin,
+                  'salon': item.salon
+                }),
+        _horarioUpdateAdapter = UpdateAdapter(
+            database,
+            'Horario',
+            ['id'],
+            (Horario item) => <String, dynamic>{
+                  'id': item.id,
+                  'tipoEspacio': item.tipoEspacio,
+                  'asignatura': item.asignatura,
+                  'numSemana': item.numSemana,
+                  'nombreProfesor': item.nombreProfesor,
+                  'grupo': item.grupo,
+                  'idioma': item.idioma,
+                  'horaInicio': _dateTimeConverter.encode(item.horaInicio),
+                  'horaFin': _dateTimeConverter.encode(item.horaFin),
+                  'fecha': item.fecha,
+                  'nombreDia': item.nombreDia,
+                  'nombreMes': item.nombreMes,
+                  'horaInicioFin': item.horaInicioFin,
+                  'salon': item.salon
+                }),
+        _horarioDeletionAdapter = DeletionAdapter(
+            database,
+            'Horario',
+            ['id'],
+            (Horario item) => <String, dynamic>{
+                  'id': item.id,
+                  'tipoEspacio': item.tipoEspacio,
+                  'asignatura': item.asignatura,
+                  'numSemana': item.numSemana,
+                  'nombreProfesor': item.nombreProfesor,
+                  'grupo': item.grupo,
+                  'idioma': item.idioma,
+                  'horaInicio': _dateTimeConverter.encode(item.horaInicio),
+                  'horaFin': _dateTimeConverter.encode(item.horaFin),
+                  'fecha': item.fecha,
+                  'nombreDia': item.nombreDia,
+                  'nombreMes': item.nombreMes,
+                  'horaInicioFin': item.horaInicioFin,
+                  'salon': item.salon
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<Horario> _horarioInsertionAdapter;
+
+  final UpdateAdapter<Horario> _horarioUpdateAdapter;
+
+  final DeletionAdapter<Horario> _horarioDeletionAdapter;
+
+  @override
+  Future<List<Horario>> getHorarioDay(
+      String day, String month, String year) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM Horario WHERE strftime("%d", horaInicio, "unixepoch") = ? AND strftime("%m", horaInicio, "unixepoch") = ? AND strftime("%y", horaInicio, "unixepoch") = ?',
+        arguments: <dynamic>[day, month, year],
+        mapper: (Map<String, dynamic> row) => Horario(
+            tipoEspacio: row['tipoEspacio'] as String,
+            asignatura: row['asignatura'] as String,
+            numSemana: row['numSemana'] as String,
+            nombreProfesor: row['nombreProfesor'] as String,
+            grupo: row['grupo'] as String,
+            idioma: row['idioma'] as String,
+            horaInicio: _dateTimeConverter.decode(row['horaInicio'] as int),
+            horaFin: _dateTimeConverter.decode(row['horaFin'] as int),
+            fecha: row['fecha'] as String,
+            nombreDia: row['nombreDia'] as String,
+            nombreMes: row['nombreMes'] as String,
+            horaInicioFin: row['horaInicioFin'] as String,
+            id: row['id'] as String,
+            salon: row['salon'] as String));
+  }
+
+  @override
+  Future<List<Horario>> getAll() async {
+    return _queryAdapter.queryList('SELECT * FROM Horario',
+        mapper: (Map<String, dynamic> row) => Horario(
+            tipoEspacio: row['tipoEspacio'] as String,
+            asignatura: row['asignatura'] as String,
+            numSemana: row['numSemana'] as String,
+            nombreProfesor: row['nombreProfesor'] as String,
+            grupo: row['grupo'] as String,
+            idioma: row['idioma'] as String,
+            horaInicio: _dateTimeConverter.decode(row['horaInicio'] as int),
+            horaFin: _dateTimeConverter.decode(row['horaFin'] as int),
+            fecha: row['fecha'] as String,
+            nombreDia: row['nombreDia'] as String,
+            nombreMes: row['nombreMes'] as String,
+            horaInicioFin: row['horaInicioFin'] as String,
+            id: row['id'] as String,
+            salon: row['salon'] as String));
+  }
+
+  @override
+  Future<int> insertItem(Horario varT) {
+    return _horarioInsertionAdapter.insertAndReturnId(
+        varT, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<List<int>> insertItems(List<Horario> varT) {
+    return _horarioInsertionAdapter.insertListAndReturnIds(
+        varT, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> updateItem(Horario varT) async {
+    await _horarioUpdateAdapter.update(varT, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> deleteItem(Horario varT) async {
+    await _horarioDeletionAdapter.delete(varT);
+  }
+
+  @override
+  Future<void> deleteItems(List<Horario> varT) async {
+    await _horarioDeletionAdapter.deleteList(varT);
+  }
+}
+
+// ignore_for_file: unused_element
+final _dateTimeConverter = DateTimeConverter();
