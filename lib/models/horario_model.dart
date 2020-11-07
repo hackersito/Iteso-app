@@ -1,3 +1,11 @@
+import 'dart:convert';
+
+List<Horario> horariosFromJson(String str) =>
+    List<Horario>.from(json.decode(str).map((x) => Horario.fromMap(x)));
+
+String horariosToJson(List<Horario> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toMap())));
+
 class Horario {
   Horario({
     this.tipoEspacio,
