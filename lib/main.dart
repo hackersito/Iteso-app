@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:iteso_app/internationalization/Translations.dart';
 import 'dart:ui' as ui;
 
@@ -14,15 +15,17 @@ void main() async {
   FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
   AppDatabase db = await $FloorAppDatabase.databaseBuilder("db").build();
   Get.lazyPut(() => DbController(db));
-  runApp(
-    GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "Application",
-      translations: AppTranslations(),
-      fallbackLocale: Locale("es", "MX"),
-      locale: ui.window.locale,
-      initialRoute: AppPages.INITIAL,
-      getPages: AppPages.routes,
-    ),
-  );
+  //Get.updateLocale(Locale("es", "MX"));
+  Get.updateLocale(ui.window.locale);
+  initializeDateFormatting().then((_) => runApp(
+        GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: "Application",
+          translations: AppTranslations(),
+          fallbackLocale: Locale("es", "MX"),
+          locale: Get.locale,
+          initialRoute: AppPages.INITIAL,
+          getPages: AppPages.routes,
+        ),
+      ));
 }

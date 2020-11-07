@@ -1,68 +1,67 @@
 class Horario {
-  String tipoEspacio;
-  String asignatura;
-  String numSemana;
-  String grupo;
-  String nombreProfesor;
-  String idioma;
-  String horaInicio;
-  String horaFin;
-  String fecha;
-  String nombreDia;
-  String nombreMes;
-  String horaInicioFin;
-  String id;
-  String salon;
+  Horario({
+    this.tipoEspacio,
+    this.asignatura,
+    this.numSemana,
+    this.nombreProfesor,
+    this.grupo,
+    this.idioma,
+    this.horaInicio,
+    this.horaFin,
+    this.fecha,
+    this.nombreDia,
+    this.nombreMes,
+    this.horaInicioFin,
+    this.id,
+    this.salon,
+  });
 
-  Horario(
-      {this.tipoEspacio,
-      this.asignatura,
-      this.numSemana,
-      this.grupo,
-      this.nombreProfesor,
-      this.idioma,
-      this.horaInicio,
-      this.horaFin,
-      this.fecha,
-      this.nombreDia,
-      this.nombreMes,
-      this.horaInicioFin,
-      this.id,
-      this.salon});
+  final String tipoEspacio;
+  final String asignatura;
+  final String numSemana;
+  final String nombreProfesor;
+  final String grupo;
+  final String idioma;
+  final DateTime horaInicio;
+  final DateTime horaFin;
+  final String fecha;
+  final String nombreDia;
+  final String nombreMes;
+  final String horaInicioFin;
+  final String id;
+  final String salon;
 
-  Horario.fromJson(Map<String, dynamic> json) {
-    tipoEspacio = json['tipoEspacio'];
-    asignatura = json['asignatura'];
-    numSemana = json['numSemana'];
-    grupo = json['grupo'];
-    nombreProfesor = json['nombreProfesor'];
-    idioma = json['idioma'];
-    horaInicio = json['horaInicio'];
-    horaFin = json['horaFin'];
-    fecha = json['fecha'];
-    nombreDia = json['nombreDia'];
-    nombreMes = json['nombreMes'];
-    horaInicioFin = json['horaInicioFin'];
-    id = json['id'];
-    salon = json['salon'];
-  }
+  factory Horario.fromMap(Map<String, dynamic> json) => Horario(
+        tipoEspacio: json["tipoEspacio"],
+        asignatura: json["asignatura"],
+        numSemana: json["numSemana"],
+        nombreProfesor: json["nombreProfesor"],
+        grupo: json["grupo"],
+        idioma: json["idioma"],
+        horaInicio: DateTime.parse(json["horaInicio"]),
+        horaFin: DateTime.parse(json["horaFin"]),
+        fecha: json["fecha"],
+        nombreDia: json["nombreDia"],
+        nombreMes: json["nombreMes"],
+        horaInicioFin: json["horaInicioFin"],
+        id: json["id"],
+        salon: json["salon"],
+      );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['tipoEspacio'] = this.tipoEspacio;
-    data['asignatura'] = this.asignatura;
-    data['numSemana'] = this.numSemana;
-    data['grupo'] = this.grupo;
-    data['nombreProfesor'] = this.nombreProfesor;
-    data['idioma'] = this.idioma;
-    data['horaInicio'] = this.horaInicio;
-    data['horaFin'] = this.horaFin;
-    data['fecha'] = this.fecha;
-    data['nombreDia'] = this.nombreDia;
-    data['nombreMes'] = this.nombreMes;
-    data['horaInicioFin'] = this.horaInicioFin;
-    data['id'] = this.id;
-    data['salon'] = this.salon;
-    return data;
-  }
+  Map<String, dynamic> toMap() => {
+        "tipoEspacio": tipoEspacio,
+        "asignatura": asignatura,
+        "numSemana": numSemana,
+        "nombreProfesor": nombreProfesor,
+        "grupo": grupo,
+        "idioma": idioma,
+        "horaInicio": horaInicio.toIso8601String(),
+        "horaFin": horaFin.toIso8601String(),
+        "fecha": fecha,
+        "nombreDia": nombreDia,
+        "nombreMes": nombreMes,
+        "horaInicioFin": horaInicioFin,
+        "id": id,
+        "salon": salon,
+      };
 }

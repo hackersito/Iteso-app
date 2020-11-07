@@ -53,8 +53,8 @@ class ItesoAppService extends StatelessWidget {
               opacity: 0.8,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  "https://iteso.mx/image/journal/article?img_id=14584551&t=1548109348352",
+                child: Image.asset(
+                  "assets/images/transporte.jpg",
                   fit: BoxFit.cover,
                 ),
               ),

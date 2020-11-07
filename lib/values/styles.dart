@@ -17,4 +17,6 @@ class Styles {
     color: Colors.white,
     fontWeight: FontWeight.w300,
   );
+
+  static const textoBlancoSimple = const TextStyle(color: Colors.white);
 }
