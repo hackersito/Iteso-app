@@ -52,9 +52,9 @@ class HomeView extends StatelessWidget {
                 Positioned(
                   bottom: MediaQuery.of(context).viewInsets.bottom != 0
                       ? MediaQuery.of(context).viewInsets.bottom
-                      : MediaQuery.of(context).size.height * 0.21,
+                      : Get.context.height * 0.21,
                   left: 0,
-                  width: MediaQuery.of(context).size.width,
+                  width: Get.context.width,
                   child: Form(
                     key: _formKey,
                     child: Padding(
@@ -112,8 +112,7 @@ class HomeView extends StatelessWidget {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
-                    margin: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).size.height * 0.12),
+                    margin: EdgeInsets.only(bottom: Get.context.height * 0.12),
                     child: GestureDetector(
                       onTap: Network.launchUrl,
                       child: Text(
@@ -129,7 +128,7 @@ class HomeView extends StatelessWidget {
                     alignment: Alignment.center,
                     height: 40,
                     color: CustomColors.azulIteso[600],
-                    width: MediaQuery.of(context).size.width,
+                    width: Get.context.width,
                     child: GestureDetector(
                       onTap: () => Get.toNamed(Routes.SERVICIOS_ITESO),
                       child: Text(
@@ -179,7 +178,7 @@ class LogoImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
+      margin: EdgeInsets.only(top: Get.context.height * 0.1),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -200,7 +199,7 @@ class WelcomeText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: MediaQuery.of(context).size.height * 0.32,
+      top: Get.context.height * 0.32,
       left: 45,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

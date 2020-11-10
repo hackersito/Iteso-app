@@ -6,11 +6,14 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:iteso_app/app/controllers/db_controller.dart';
 import 'package:iteso_app/models/horario_model.dart';
 import 'package:iteso_app/network/network.dart';
 import 'package:iteso_app/values/styles.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import 'package:supercharged/supercharged.dart';
 
 class MenuView extends StatefulWidget {
   MenuView({Key key}) : super(key: key);
@@ -25,9 +28,9 @@ class MenuView extends StatefulWidget {
 class _MenuViewState extends State<MenuView> {
   CalendarController _calendarController;
 
-  DateTime _dateTime;
+  DateTime _dateTime = DateTime.now();
 
-  List<Horario> _horarios;
+  final DateFormat formatter = DateFormat('yyyy-MM-dd');
 
   @override
   void initState() {
@@ -59,49 +62,48 @@ class _MenuViewState extends State<MenuView> {
           //Handle button tap
         },
       ),
-      body: Column(
-        children: <Widget>[
-          CustomCalendar(
-            onDateSelected: (value) async {
-              _dateTime = value;
-              await getHorarios(_dateTime);
-              setState(
-                () {},
-              );
-            },
-          ),
-          Flexible(
-            child: ListView.builder(
-              itemCount: _horarios?.length ?? 0,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: Container(
-                      padding: EdgeInsets.all(15),
-                      child: Text(_horarios[index].asignatura)),
-                );
-              },
-            ),
-          )
-        ],
-      ),
+      body: StreamBuilder<List<Horario>>(
+          stream: Get.find<DbController>()
+              .db
+              .horarioDao
+              .getHorarioDay(formatter.format(_dateTime)),
+          builder: (context, snapshot) {
+            return Column(
+              children: <Widget>[
+                CustomCalendar(
+                  onDateSelected: (value) {
+                    setState(() {
+                      _dateTime = value;
+                      getHorarios(_dateTime);
+                    });
+                  },
+                ),
+                Flexible(
+                  child: ListView.builder(
+                    itemCount: snapshot.data?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        child: Container(
+                            padding: EdgeInsets.all(15),
+                            child: Text(snapshot.data[index].asignatura ?? "")),
+                      );
+                    },
+                  ),
+                )
+              ],
+            );
+          }),
     );
-  }
-
-  void getHorarios(DateTime dateTime) async {
-    await Network.getData(
-            Network.URL_HORARIO, "/${Jiffy(dateTime).week}/${dateTime.year}")
-        .then((value) {
-      _horarios = horariosFromJson(value.body)
-          .where((element) => element.horaFin.day == dateTime.day)
-          .toList();
-    });
   }
 }
 
 class CustomCalendar extends StatefulWidget {
   final ValueChanged<DateTime> onDateSelected;
-  CustomCalendar({Key key, @required this.onDateSelected}) : super(key: key);
 
+  CustomCalendar({
+    Key key,
+    @required this.onDateSelected,
+  }) : super(key: key);
   @override
   _CustomCalendarState createState() => _CustomCalendarState();
 }
@@ -147,6 +149,20 @@ class _CustomCalendarState extends State<CustomCalendar> {
         child: TableCalendar(
           onDaySelected: (day, events, holidays) => widget.onDateSelected(day),
           initialCalendarFormat: CalendarFormat.week,
+          onHeaderLongPressed: (focusedDay) async {
+            DateTime _time = await showDatePicker(
+              context: context,
+              initialDate: focusedDay,
+              locale: Get.locale,
+              initialDatePickerMode: DatePickerMode.year,
+              firstDate: DateTime(focusedDay.year - 1),
+              lastDate: DateTime(focusedDay.year + 1),
+            );
+            setState(() {
+              _calendarController.setSelectedDay(_time);
+              widget.onDateSelected(_time);
+            });
+          },
           locale: Get.locale.toString(),
           headerStyle: HeaderStyle(
             centerHeaderTitle: true,
@@ -211,7 +227,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
             dowWeekdayBuilder: (context, weekday) {
               return Center(
                 child: Text(
-                  weekday[0].toUpperCase(),
+                  weekday.capitalizeFirst,
                   style: Styles.textoBlancoSimple
                       .copyWith(fontSize: 17, fontWeight: FontWeight.bold),
                 ),
@@ -222,4 +238,19 @@ class _CustomCalendarState extends State<CustomCalendar> {
       ),
     );
   }
+}
+
+void getHorarios(DateTime dateTime) async {
+  return await Network.getData(
+          Network.URL_HORARIO, "/${Jiffy(dateTime).week}/${dateTime.year}")
+      .then((value) {
+    final List<Horario> horarios = horariosFromJson(value.body)
+        .where((element) => element.horaFin.day == dateTime.day)
+        .toList();
+    try {
+      Get.find<DbController>().db.horarioDao.insertItems(horarios);
+    } on Exception catch (e) {
+      e.printError();
+    }
+  });
 }

@@ -1,13 +1,13 @@
 import 'package:floor/floor.dart';
 
-class DateTimeConverter extends TypeConverter<DateTime, int> {
+class DateTimeConverter extends TypeConverter<DateTime, String> {
   @override
-  DateTime decode(int databaseValue) {
-    return DateTime.fromMillisecondsSinceEpoch(databaseValue);
+  DateTime decode(String databaseValue) {
+    return DateTime.parse(databaseValue);
   }
 
   @override
-  int encode(DateTime value) {
-    return value.millisecondsSinceEpoch;
+  String encode(DateTime value) {
+    return value.toIso8601String();
   }
 }

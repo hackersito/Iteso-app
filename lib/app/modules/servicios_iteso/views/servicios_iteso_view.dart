@@ -64,14 +64,14 @@ class ItesoAppService extends StatelessWidget {
               alignment: Alignment.bottomLeft,
               child: Container(
                 padding: EdgeInsets.all(10),
-                width: (MediaQuery.of(context).size.width - 40) * 0.7,
+                width: (Get.context.width - 40) * 0.7,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.white70,
                 ),
                 margin: EdgeInsets.only(bottom: 15, left: 15),
                 child: SizedBox(
-                  width: (MediaQuery.of(context).size.width - 40) * 0.7,
+                  width: (Get.context.width - 40) * 0.7,
                   child: Text(
                     title.tr,
                     textAlign: TextAlign.center,

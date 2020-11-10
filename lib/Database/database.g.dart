@@ -84,7 +84,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Login` (`token` TEXT, PRIMARY KEY (`token`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Horario` (`id` TEXT, `tipoEspacio` TEXT, `asignatura` TEXT, `numSemana` TEXT, `nombreProfesor` TEXT, `grupo` TEXT, `idioma` TEXT, `horaInicio` INTEGER, `horaFin` INTEGER, `fecha` TEXT, `nombreDia` TEXT, `nombreMes` TEXT, `horaInicioFin` TEXT, `salon` TEXT, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `Horario` (`id` TEXT, `tipoEspacio` TEXT, `asignatura` TEXT, `numSemana` TEXT, `nombreProfesor` TEXT, `grupo` TEXT, `idioma` TEXT, `horaInicio` TEXT, `horaFin` TEXT, `fecha` TEXT, `nombreDia` TEXT, `nombreMes` TEXT, `horaInicioFin` TEXT, `salon` TEXT, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -161,7 +161,7 @@ class _$LoginDao extends LoginDao {
 
 class _$HorarioDao extends HorarioDao {
   _$HorarioDao(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database),
+      : _queryAdapter = QueryAdapter(database, changeListener),
         _horarioInsertionAdapter = InsertionAdapter(
             database,
             'Horario',
@@ -180,7 +180,8 @@ class _$HorarioDao extends HorarioDao {
                   'nombreMes': item.nombreMes,
                   'horaInicioFin': item.horaInicioFin,
                   'salon': item.salon
-                }),
+                },
+            changeListener),
         _horarioUpdateAdapter = UpdateAdapter(
             database,
             'Horario',
@@ -200,7 +201,8 @@ class _$HorarioDao extends HorarioDao {
                   'nombreMes': item.nombreMes,
                   'horaInicioFin': item.horaInicioFin,
                   'salon': item.salon
-                }),
+                },
+            changeListener),
         _horarioDeletionAdapter = DeletionAdapter(
             database,
             'Horario',
@@ -220,7 +222,8 @@ class _$HorarioDao extends HorarioDao {
                   'nombreMes': item.nombreMes,
                   'horaInicioFin': item.horaInicioFin,
                   'salon': item.salon
-                });
+                },
+            changeListener);
 
   final sqflite.DatabaseExecutor database;
 
@@ -235,11 +238,12 @@ class _$HorarioDao extends HorarioDao {
   final DeletionAdapter<Horario> _horarioDeletionAdapter;
 
   @override
-  Future<List<Horario>> getHorarioDay(
-      String day, String month, String year) async {
-    return _queryAdapter.queryList(
-        'SELECT * FROM Horario WHERE strftime("%d", horaInicio, "unixepoch") = ? AND strftime("%m", horaInicio, "unixepoch") = ? AND strftime("%y", horaInicio, "unixepoch") = ?',
-        arguments: <dynamic>[day, month, year],
+  Stream<List<Horario>> getHorarioDay(String date) {
+    return _queryAdapter.queryListStream(
+        'SELECT * FROM Horario WHERE date(horaInicio) = ?',
+        arguments: <dynamic>[date],
+        queryableName: 'Horario',
+        isView: false,
         mapper: (Map<String, dynamic> row) => Horario(
             tipoEspacio: row['tipoEspacio'] as String,
             asignatura: row['asignatura'] as String,
@@ -247,8 +251,8 @@ class _$HorarioDao extends HorarioDao {
             nombreProfesor: row['nombreProfesor'] as String,
             grupo: row['grupo'] as String,
             idioma: row['idioma'] as String,
-            horaInicio: _dateTimeConverter.decode(row['horaInicio'] as int),
-            horaFin: _dateTimeConverter.decode(row['horaFin'] as int),
+            horaInicio: _dateTimeConverter.decode(row['horaInicio'] as String),
+            horaFin: _dateTimeConverter.decode(row['horaFin'] as String),
             fecha: row['fecha'] as String,
             nombreDia: row['nombreDia'] as String,
             nombreMes: row['nombreMes'] as String,
@@ -258,8 +262,10 @@ class _$HorarioDao extends HorarioDao {
   }
 
   @override
-  Future<List<Horario>> getAll() async {
-    return _queryAdapter.queryList('SELECT * FROM Horario',
+  Stream<List<Horario>> getAll() {
+    return _queryAdapter.queryListStream('SELECT * FROM Horario',
+        queryableName: 'Horario',
+        isView: false,
         mapper: (Map<String, dynamic> row) => Horario(
             tipoEspacio: row['tipoEspacio'] as String,
             asignatura: row['asignatura'] as String,
@@ -267,8 +273,8 @@ class _$HorarioDao extends HorarioDao {
             nombreProfesor: row['nombreProfesor'] as String,
             grupo: row['grupo'] as String,
             idioma: row['idioma'] as String,
-            horaInicio: _dateTimeConverter.decode(row['horaInicio'] as int),
-            horaFin: _dateTimeConverter.decode(row['horaFin'] as int),
+            horaInicio: _dateTimeConverter.decode(row['horaInicio'] as String),
+            horaFin: _dateTimeConverter.decode(row['horaFin'] as String),
             fecha: row['fecha'] as String,
             nombreDia: row['nombreDia'] as String,
             nombreMes: row['nombreMes'] as String,
