@@ -36,7 +36,6 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: false,
       backgroundColor: CustomColors.azulIteso,
       body: LayoutBuilder(
@@ -114,7 +113,8 @@ class HomeView extends StatelessWidget {
                   child: Container(
                     margin: EdgeInsets.only(bottom: Get.context.height * 0.12),
                     child: GestureDetector(
-                      onTap: Network.launchUrl,
+                      onTap: () =>
+                          Network.launchUrl(Network.URL_PRIVACY, "err_url"),
                       child: Text(
                         "privacy".tr,
                         style: Styles.textoBlanco,

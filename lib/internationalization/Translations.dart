@@ -29,7 +29,7 @@ class AppTranslations extends Translations {
 
         // Translations login page
         "es_MX": {
-          "welcome": "Bienvenido de regreso.",
+          "welcome": "Bienvenido de  nuevo.",
           "text_login": "Inicia sesión y empecemos",
           "username": "Cuenta",
           "pass": "Contraseña",

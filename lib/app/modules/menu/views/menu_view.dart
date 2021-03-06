@@ -1,5 +1,8 @@
+import 'dart:async';
 import 'dart:ui';
 
+import 'package:connection_verify/connection_verify.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -12,8 +15,6 @@ import 'package:iteso_app/network/network.dart';
 import 'package:iteso_app/values/styles.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-import 'package:supercharged/supercharged.dart';
 
 class MenuView extends StatefulWidget {
   MenuView({Key key}) : super(key: key);
@@ -32,16 +33,26 @@ class _MenuViewState extends State<MenuView> {
 
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
 
+  bool _isConnected = false;
+
+  StreamSubscription _subscription;
+
   @override
   void initState() {
     super.initState();
     getHorarios(DateTime.now());
+    _subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) async {
+      _isConnected = await ConnectionVerify.connectionStatus();
+    });
     _calendarController = CalendarController();
   }
 
   @override
   void dispose() {
     _calendarController.dispose();
+    _subscription.cancel();
     super.dispose();
   }
 
